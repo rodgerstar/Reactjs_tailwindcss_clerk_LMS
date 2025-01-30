@@ -4,7 +4,7 @@ import React from "react";
 const MyCourses = () => {
     return (
         <div>
-            <h1>Navbar</h1>
+            <h1>My courses</h1>
 
         </div>
     )

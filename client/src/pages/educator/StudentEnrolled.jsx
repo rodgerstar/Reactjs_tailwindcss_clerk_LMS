@@ -4,7 +4,7 @@ import React from "react";
 const StudentEnrolled = () => {
     return (
         <div>
-            <h1>Navbar</h1>
+            <h1>Students Enrolled</h1>
 
         </div>
     )
