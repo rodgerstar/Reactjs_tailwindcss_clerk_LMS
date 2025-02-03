@@ -3,6 +3,7 @@ import Hero from "../../Components/student/Hero.jsx";
 import Companies from "../../Components/student/Companies.jsx";
 import CoursesSection from "../../Components/student/CoursesSection.jsx";
 import TestimonialSection from "../../Components/student/TestimonialSection.jsx";
+import CallToAction from "../../Components/student/CallToAction.jsx";
 
 
 const Home = () => {
@@ -13,6 +14,7 @@ const Home = () => {
             <Companies/>
             <CoursesSection/>
             <TestimonialSection/>
+            <CallToAction/>
         </div>
     )
 }
