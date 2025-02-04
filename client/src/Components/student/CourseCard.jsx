@@ -20,7 +20,7 @@ const CourseCard = ({ course }) => {
                 >{course.courseTitle}</h3>
                 <p
                 className='text-gray-500'
-                >{course.educator.name}</p>
+                >rodgers</p>
                 <div
                 className='flex items-center space-x-2'
                 >
