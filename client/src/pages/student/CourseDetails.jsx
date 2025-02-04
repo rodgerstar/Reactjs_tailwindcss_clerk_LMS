@@ -14,7 +14,7 @@ const CourseDetails = () => {
     const [openSection, setOpenSection] = useState({})
 
     const {allCourses, calculateRating, calculateNoOfLectures,
-        calculateCourseDuration, calculateChapterTime} = useContext(AppContext)
+        calculateCourseDuration, calculateChapterTime, currency} = useContext(AppContext)
 
     const fetchCourseData = async () => {
         const findCourse = allCourses.find(course => course._id === id)
@@ -123,7 +123,23 @@ const CourseDetails = () => {
 
 
                 {/*right column*/}
-                <div></div>
+                <div className='max-w-course-card z-10 shadow-custom-card rounded-t
+                md:rounded-none overflow-hidden bg-white min-w-[300px] sm:min-w-[420px]'>
+                    <img src={courseData.courseThumbnail} alt=""/>
+                    <div className='p-5'>
+                        <div className='flex items-center gap-2'>
+                            <img className='w-3.5' src={assets.time_left_clock_icon} alt="time left clock icon"/>
+                            <p className='text-red-500'> <span className='font-medium'>5 days </span>left at this price!</p>
+                        </div>
+                        <div className='flex gap-3 items-center pt-2'>
+                            <p className='text-gray-800 md:text-4xl text-2xl font-semibold'>{currency} {(courseData.coursePrice - courseData.discount *
+                            courseData.coursePrice / 100).toFixed(2)}</p>
+                            <p className='md:text-lg text-gray-500 line-through'>{currency} {courseData.coursePrice}</p>
+                            <p className='md:text-lg text-gray-500'>{courseData.discount}% off</p>
+                        </div>
+
+                    </div>
+                </div>
 
             </div>
         </>
