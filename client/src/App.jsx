@@ -12,6 +12,7 @@ import AddCourse from "./pages/educator/AddCourse.jsx";
 import MyCourses from "./pages/educator/MyCourses.jsx";
 import StudentEnrolled from "./pages/educator/StudentEnrolled.jsx";
 import Navbar from "./Components/student/Navbar.jsx";
+import "quill/dist/quill.snow.css"
 
 
 
