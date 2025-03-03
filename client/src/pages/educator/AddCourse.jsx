@@ -181,7 +181,7 @@ const AddCourse = () => {
                                                     <img
                                                         src={assets.cross_icon}
                                                         alt="Remove lecture"
-                                                        className=" cursor-pointer"
+                                                        className="cursor-pointer"
                                                         onClick={() => handleLecture("remove", chapter.chapterId, lectureIndex)}
                                                     />
                                                 </div>
