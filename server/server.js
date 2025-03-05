@@ -6,28 +6,31 @@ import { clerkWebhooks } from "./configs/webhooks.js";
 import educatorRouter from "./routes/educatorRoute.js";
 import { clerkMiddleware } from "@clerk/express";
 import connectCloudinary from "./configs/cloudinary.js";
+import courseRouter from "./routes/courseRoute.js";
 
 const app = express();
 
-// Connect to DB
+// Middlewares (applied globally)
+app.use(cors());
+app.use(express.json()); // Moved up to parse JSON for all routes
+app.use((req, res, next) => {
+    console.log("Incoming Request:", req.method, req.url, "Authorization:", req.headers.authorization);
+    next();
+});
+app.use(clerkMiddleware({
+    secretKey: process.env.CLERK_SECRET_KEY,
+}));
+
+// Connect to DB and start server
 (async () => {
     await connectDB();
-    await connectCloudinary()
-
-    // Middlewares
-    app.use(cors());
-    app.use((req, res, next) => {
-        console.log("Incoming Request:", req.method, req.url, "Authorization:", req.headers.authorization);
-        next();
-    });
-    app.use(clerkMiddleware({
-        secretKey: process.env.CLERK_SECRET_KEY, // Explicitly pass the secret key
-    }));
+    await connectCloudinary();
 
     // Routes
     app.get("/", (req, res) => res.send("API Working"));
-    app.post("/clerk", express.json(), clerkWebhooks);
-    app.use("/api/educator", express.json(), educatorRouter);
+    app.post("/clerk", clerkWebhooks); // No need for express.json() again
+    app.use("/api/educator", educatorRouter); // No need for express.json() again
+    app.use("/api/course", courseRouter); // No need for express.json() again
 
     // Port
     const PORT = process.env.PORT || 5000;
