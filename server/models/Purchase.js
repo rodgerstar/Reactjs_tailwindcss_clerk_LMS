@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const PurchaseSchema = new mongoose.Schema({
-    CourseId: {type: mongoose.Schema.Types.ObjectId,
+    courseId: {type: mongoose.Schema.Types.ObjectId,
     ref: 'Course',
     required: true
     },
@@ -17,7 +17,7 @@ const PurchaseSchema = new mongoose.Schema({
     status: {
         type: String,
         enum: ['pending', 'completed', 'failed'],
-        default: 'pendiing'
+        default: 'pending'
     }
 }, {timestamps: true})
 
