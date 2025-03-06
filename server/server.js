@@ -14,9 +14,9 @@ const app = express();
 // Buffer raw body for Stripe webhooks
 app.use((req, res, next) => {
     if (req.url === '/stripe' && req.method === 'POST') {
-        req.rawBody = '';
+        req.rawBody = Buffer.from('');
         req.on('data', chunk => {
-            req.rawBody += chunk;
+            req.rawBody = Buffer.concat([req.rawBody, chunk]);
         });
         req.on('end', () => {
             next();
