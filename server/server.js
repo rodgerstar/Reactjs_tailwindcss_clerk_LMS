@@ -11,15 +11,19 @@ import userRouter from "./routes/userRoute.js";
 
 const app = express();
 
-// Ensure raw body is preserved for Stripe webhooks
+// Buffer raw body for Stripe webhooks
 app.use((req, res, next) => {
-    req.rawBody = '';
-    req.on('data', chunk => {
-        req.rawBody += chunk;
-    });
-    req.on('end', () => {
+    if (req.url === '/stripe' && req.method === 'POST') {
+        req.rawBody = '';
+        req.on('data', chunk => {
+            req.rawBody += chunk;
+        });
+        req.on('end', () => {
+            next();
+        });
+    } else {
         next();
-    });
+    }
 });
 
 app.use(cors());
@@ -33,13 +37,8 @@ app.use(clerkMiddleware({
 }));
 
 (async () => {
-    try {
-        await connectDB();
-        await connectCloudinary();
-        console.log("Connected to MongoDB and Cloudinary");
-    } catch (err) {
-        console.error("Startup error:", err);
-    }
+    await connectDB();
+    await connectCloudinary();
 })();
 
 app.get("/", (req, res) => res.send("API Working"));
@@ -49,4 +48,13 @@ app.use("/api/course", courseRouter);
 app.use('/api/user', userRouter);
 app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhooks);
 
+// Export for Vercel serverless
 export default app;
+
+// Keep app.listen for local dev (optional, ignored by Vercel)
+if (process.env.NODE_ENV !== 'production') {
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+}
