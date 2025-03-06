@@ -11,7 +11,17 @@ import userRouter from "./routes/userRoute.js";
 
 const app = express();
 
-// Middlewares (applied globally)
+// Ensure raw body is preserved for Stripe webhooks
+app.use((req, res, next) => {
+    req.rawBody = '';
+    req.on('data', chunk => {
+        req.rawBody += chunk;
+    });
+    req.on('end', () => {
+        next();
+    });
+});
+
 app.use(cors());
 app.use(express.json());
 app.use((req, res, next) => {
@@ -22,24 +32,21 @@ app.use(clerkMiddleware({
     secretKey: process.env.CLERK_SECRET_KEY,
 }));
 
-// Connect to DB and start server
 (async () => {
-    await connectDB();
-    await connectCloudinary();
-
-    // Routes
-    app.get("/", (req, res) => res.send("API Working"));
-    app.post("/clerk", clerkWebhooks);
-    app.use("/api/educator", educatorRouter);
-    app.use("/api/course", courseRouter);
-    app.use('/api/user', userRouter);
-    app.post('/stripe', express.raw({
-        type: 'application/json'
-    }), stripeWebhooks);
-
-    // Port
-    const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
-    });
+    try {
+        await connectDB();
+        await connectCloudinary();
+        console.log("Connected to MongoDB and Cloudinary");
+    } catch (err) {
+        console.error("Startup error:", err);
+    }
 })();
+
+app.get("/", (req, res) => res.send("API Working"));
+app.post("/clerk", clerkWebhooks);
+app.use("/api/educator", educatorRouter);
+app.use("/api/course", courseRouter);
+app.use('/api/user', userRouter);
+app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhooks);
+
+export default app;
