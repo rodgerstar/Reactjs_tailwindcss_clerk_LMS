@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
 
 const PurchaseSchema = new mongoose.Schema({
-    courseId: {type: mongoose.Schema.Types.ObjectId,
-    ref: 'Course',
-    required: true
+    courseId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Course',
+        required: true
     },
     userId: {
-        type:String,
+        type: String,
         ref: 'User',
         required: true
     },
@@ -19,6 +20,6 @@ const PurchaseSchema = new mongoose.Schema({
         enum: ['pending', 'completed', 'failed'],
         default: 'pending'
     }
-}, {timestamps: true})
+}, { timestamps: true });
 
-export const Purchase = mongoose.model('Purchase', PurchaseSchema)
+export const Purchase = mongoose.model('Purchase', PurchaseSchema);
