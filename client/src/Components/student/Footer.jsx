@@ -33,7 +33,7 @@ const Footer = () => {
                 </div>
             </div>
             <p className='py-4 text-center text-xs md:text-sm text-white/60'>
-                Copyright 2025 © Elevate Academy | Powered by Nexel
+                Copyright 2025 © StudyForge Academy | Powered by Nexel
             </p>
         </footer>
     )
