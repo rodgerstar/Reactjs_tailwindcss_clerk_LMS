@@ -10,7 +10,7 @@ const lectureSchema = new mongoose.Schema({
 }, {_id: false});
 
 const chapterSchema = new mongoose.Schema({
-    chapterId: {type: Number, required:true},
+    chapterId: {type: String, required:true},
     chapterOrder: {type: Number, required:true},
     chapterTitle: {type: String, required:true},
     chapterContent: [lectureSchema]

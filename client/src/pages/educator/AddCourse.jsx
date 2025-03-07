@@ -1,11 +1,15 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import uniqid from 'uniqid'
 import Quill from "quill";
-import theme from "tailwindcss/defaultTheme.js";
 import {assets} from "../../assets/assets.js";
+import {AppContext} from "../../context/AppContext.jsx";
+import {toast} from "react-toastify";
+import axios from "axios";
 
 
 const AddCourse = () => {
+
+    const {backendUrl, getToken} = useContext(AppContext)
 
     const quillRef = useRef(null)
     const editorRef = useRef(null)
@@ -92,8 +96,45 @@ const AddCourse = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
-    }
+        try {
+            e.preventDefault();
+            if (!image) {
+                toast.error('Thumbnail Not Selected');
+                return; // Add return to prevent further execution
+            }
+            const courseData = {
+                courseTitle,
+                courseDescription: quillRef.current.root.innerHTML,
+                coursePrice: Number(coursePrice),
+                discount: Number(discount),
+                courseContent: chapters,
+            };
+            const formData = new FormData();
+            formData.append('courseData', JSON.stringify(courseData));
+            formData.append('image', image);
+
+            const token = await getToken(); // Call the function with ()
+            const {data} = await axios.post(backendUrl + 'api/educator/add-course', formData, { // Remove {formData} nesting
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data' // Explicitly set for FormData
+                }
+            });
+            if (data.success) {
+                toast.success(data.message);
+                setCourseTitle('');
+                setCoursePrice(0);
+                setDiscount(0);
+                setImage(null);
+                setChapters([]);
+                quillRef.current.root.innerHTML = "";
+            } else {
+                toast.error(data.message);
+            }
+        } catch (error) {
+            toast.error(error.message);
+        }
+    };
 
 
     useEffect(() => {
