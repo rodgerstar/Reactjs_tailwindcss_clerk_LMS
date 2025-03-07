@@ -126,15 +126,15 @@ export const AppContextProvider = (props) => {
         fetchAllCourses()
     }, []);
 
-    // const logToken = async () => {
-    //     const token = await getToken();
-    //     console.log("Token:", token); // Log the token explicitly
-    //     if (!token) console.log("No token returned from getToken()");
-    // };
+    const logToken = async () => {
+        const token = await getToken();
+        console.log("Token:", token); // Log the token explicitly
+        if (!token) console.log("No token returned from getToken()");
+    };
 
     useEffect(() => {
         if (user) {
-            // logToken();
+            logToken();
             fetchUserData()
             fetchUserEnrolledCourses()
         } else {
